@@ -24,8 +24,8 @@ jobs:
           npm run test
 
       - name: Slack 通知（失敗時のみ）
-  if: failure()
-  run: |
-    curl -X POST -H 'Content-type: application/json' \
-    --data '{"text":"❌ GitHub Actionsでテストが失敗しました"}' \
-    ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"❌ GitHub Actionsでテストが失敗しました"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
