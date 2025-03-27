@@ -1,0 +1,31 @@
+name: Slack通知付き CI
+
+on:
+  push:
+    branches:
+      - main  # 監視したいブランチ
+
+jobs:
+  build-and-notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Node.js をセットアップ
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: テストを実行
+        run: |
+          npm install
+          npm run test
+
+      - name: Slack 通知（失敗時のみ）
+  if: failure()
+  run: |
+    curl -X POST -H 'Content-type: application/json' \
+    --data '{"text":"❌ GitHub Actionsでテストが失敗しました"}' \
+    ${{ secrets.SLACK_WEBHOOK_URL }}
